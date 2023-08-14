@@ -11,6 +11,8 @@ import (
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/config"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/database/postgres"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/protocol"
+	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/repository"
+	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/user"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/transport/http"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/pkg/log"
 	"github.com/urfave/cli/v2"
@@ -85,6 +87,10 @@ func api(_ *cli.Context) (err error) {
 		}
 	}()
 
+	userRepo := repository.NewUser(postgresDB)
+
+	userService := user.New(cfg.JWT, logger, userRepo)
+
 	// Make a channel to listen for an interrupt or terminate signal from the OS.
 	// Use a buffered channel because the signal package requires it.
 	shutdown := make(chan os.Signal, 1)
@@ -92,8 +98,9 @@ func api(_ *cli.Context) (err error) {
 
 	// server init
 	serverConfig := http.ServerConfig{
-		Logger: logger,
-		Config: cfg.HTTP,
+		Logger:      logger,
+		Config:      cfg.HTTP,
+		UserService: userService,
 	}
 	httpServer = http.New(serverConfig)
 

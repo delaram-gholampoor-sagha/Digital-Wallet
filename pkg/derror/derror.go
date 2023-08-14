@@ -3,6 +3,8 @@ package derror
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/delaram-gholampoor-sagha/Digital-Wallet/pkg/derror/message"
 )
 
 // Error represents a custom error with a message, arguments, and an HTTP status code.
@@ -31,8 +33,8 @@ func (e *Error) Error() string {
 }
 
 // NewInternalSystemError creates a 500 Internal Server Error.
-func NewInternalSystemError(msg string) error {
-	return NewError(msg, http.StatusInternalServerError)
+func NewInternalSystemError() error {
+	return NewError(message.InternalSystemError, http.StatusInternalServerError)
 }
 
 // NewBadRequestError creates a 400 Bad Request error.

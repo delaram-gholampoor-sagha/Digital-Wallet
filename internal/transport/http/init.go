@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/config"
+	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/protocol"
 	"github.com/labstack/echo/v4"
 	echomw "github.com/labstack/echo/v4/middleware"
 	"go.uber.org/zap"
@@ -16,8 +17,10 @@ type (
 	}
 
 	ServerConfig struct {
-		Config config.HTTP
-		Logger *zap.SugaredLogger
+		Config      config.HTTP
+		Logger      *zap.SugaredLogger
+		UserService protocol.User
+		JWTSecret   string
 	}
 )
 
@@ -56,7 +59,10 @@ func New(sc ServerConfig) *Server {
 		address: sc.Config.Address,
 	}
 
-	server.register()
+	server.register(
+		sc.JWTSecret,
+		sc.UserService,
+	)
 
 	return server
 }
