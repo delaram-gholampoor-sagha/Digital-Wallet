@@ -1,0 +1,38 @@
+http:
+  address: 127.0.0.1:8080
+  read_timeout: 5s
+  write_timeout: 0s
+  idle_timeout: 120s
+  shutdown_timeout: 20s
+  cors:
+    allowed_origins: ['*']
+    allowed_headers: []
+    allowed_methods: ['GET', 'HEAD', 'PUT', 'POST', 'PATCH', 'DELETE']
+    allow_credentials: false
+    exposed_headers: []
+    max_age: 0
+  recover:
+    stack_size: 4
+    disable_stack_all: false
+    disable_print_stack: false
+  body_limit_size: '1MB'
+
+postgres:
+  name: airticket
+  host: localhost
+  port: 5432
+  user: admin
+  password: 1234
+
+jwt:
+  secret: secret
+  access_token_exp: 72h
+  refresh_token_exp: 4320h
+
+logger:
+  output_paths:
+    - stdout
+  error_output_paths:
+    - stderr
+  disable_stack_trace: true
+  level: -1

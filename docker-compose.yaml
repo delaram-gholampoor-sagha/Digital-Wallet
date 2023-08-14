@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  database:
+    image: 'postgres:15'
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: airticket
+    volumes:
+      - postgres_data_container:/var/lib/postgresql/data/
+
+volumes:
+  postgres_data_container:
