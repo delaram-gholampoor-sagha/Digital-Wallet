@@ -6,6 +6,7 @@ require (
 	github.com/go-playground/validator/v10 v10.15.0
 	github.com/labstack/echo/v4 v4.11.1
 	github.com/labstack/gommon v0.4.0
+	github.com/lib/pq v1.10.9
 	github.com/spf13/viper v1.16.0
 	github.com/urfave/cli/v2 v2.25.7
 	go.uber.org/automaxprocs v1.5.3

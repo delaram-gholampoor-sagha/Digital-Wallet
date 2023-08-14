@@ -9,6 +9,7 @@ import (
 	"syscall"
 
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/config"
+	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/database/postgres"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/protocol"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/transport/http"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/pkg/log"
@@ -66,6 +67,23 @@ func api(_ *cli.Context) (err error) {
 			err = fmt.Errorf("sync logger: %w", err)
 		}
 	}(logger)
+
+	// Create connectivity to the database.
+	fmt.Println("connecting to postgres databases...")
+	postgresDB, err := postgres.New(cfg.Postgres)
+	if err != nil {
+		return fmt.Errorf("connecting to database: %w", err)
+	}
+	fmt.Println("connected to postgres databases")
+
+	defer func() {
+		fmt.Println("closing postgres connections start")
+		defer fmt.Println("closing postgres connections complete")
+
+		if derr := postgresDB.Close(); derr != nil && err == nil {
+			err = fmt.Errorf("closing postgres connections: %w", err)
+		}
+	}()
 
 	// Make a channel to listen for an interrupt or terminate signal from the OS.
 	// Use a buffered channel because the signal package requires it.
