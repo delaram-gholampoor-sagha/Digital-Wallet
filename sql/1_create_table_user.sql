@@ -1,0 +1,15 @@
+create table public.user (
+    id serial primary key,
+    username varchar(30) not null unique,
+    password varchar(100) not null,
+    first_name varchar(50),
+    last_name varchar(50),
+    email varchar(100),
+    validated_email boolean default false,
+    cellphone varchar(20),
+    validated_cellphone boolean default false,
+    is_admin boolean default false,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+);

@@ -1,0 +1,16 @@
+CREATE TABLE public.financial_account (
+    account_id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES public.user,
+    currency_id INTEGER REFERENCES public.currency,
+    bank_id INTEGER REFERENCES banks(bank_id),
+    branch_id INTEGER REFERENCES bank_branches(branch_id),
+    account_number VARCHAR(20) NOT NULL,
+    shaba_number VARCHAR(26) UNIQUE NOT NULL,
+    account_name VARCHAR(100),
+    account_type ENUM('checking', 'savings'),
+    currency_code CHAR(3) REFERENCES currency(currency_code),
+    status ENUM('verified', 'unverified') DEFAULT 'unverified',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+);
