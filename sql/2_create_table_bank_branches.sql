@@ -1,4 +1,4 @@
-CREATE TABLE public.bank_branches (
+CREATE TABLE public.bank_branche (
   branch_id SERIAL PRIMARY KEY,
   bank_id INTEGER NOT NULL REFERENCES public.bank,
   branch_name VARCHAR(100) NOT NULL,
