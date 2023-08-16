@@ -11,10 +11,6 @@ type AddCurrency struct {
 	CurrencyID int
 }
 
-type UpdateCurrency struct {
-	CurrencyID int
-}
-
 type CurrencyComparison struct {
 	FirstCurrency  entity.Currency
 	SecondCurrency entity.Currency

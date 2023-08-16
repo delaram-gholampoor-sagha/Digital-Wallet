@@ -12,7 +12,7 @@ import (
 
 type CurrencyService interface {
 	AddCurrency(ctx context.Context, req request.AddCurrency) (response.AddCurrency, error)
-	UpdateCurrency(ctx context.Context, req request.UpdateCurrency) (response.UpdateCurrency, error)
+	UpdateCurrency(ctx context.Context, req request.UpdateCurrency) error
 	DeleteCurrency(ctx context.Context, currencyID int) error
 	GetCurrency(ctx context.Context, currencyID int) (entity.Currency, error)
 	GetCurrencyByName(ctx context.Context, currencyName enum.CurrencyName) (entity.Currency, error)
