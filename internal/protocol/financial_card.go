@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/entity"
+	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/entity/enum"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/protocol/request"
 )
 
@@ -13,6 +14,7 @@ type FinancialCardService interface {
 	DeleteCard(ctx context.Context, cardID int64) error
 	GetCardByID(ctx context.Context, cardID int64) (*entity.FinancialCard, error)
 	ListCardsByAccountID(ctx context.Context, accountID int) ([]*entity.FinancialCard, error)
+	ListCardsByType(ctx context.Context, cardType enum.FinancialCardType) ([]*entity.FinancialCard, error)
 }
 
 type FinancialCardRepository interface {
@@ -21,4 +23,5 @@ type FinancialCardRepository interface {
 	Delete(ctx context.Context, cardID int64) error
 	GetByID(ctx context.Context, cardID int64) (*entity.FinancialCard, error)
 	ListByAccountID(ctx context.Context, accountID int) ([]*entity.FinancialCard, error)
+	ListByCardType(ctx context.Context, cardType enum.FinancialCardType) ([]*entity.FinancialCard, error)
 }
