@@ -7,12 +7,12 @@ import (
 )
 
 type FinancialAccountTransaction struct {
-	TransactionID      int64
+	TransactionID      int
 	TransactionGroupID int
-	FinancialAccountID int64
+	FinancialAccountID int
 	Amount             float64
 	Balance            float64
-	Description        string
+	Description        *string
 	Status             enum.FinancialAccountTransactionStatus
 	CreatedAt          time.Time
 	UpdatedAt          time.Time
