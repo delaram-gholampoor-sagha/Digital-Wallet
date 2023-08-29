@@ -15,15 +15,15 @@ type User struct {
 
 func (repo *User) Get(ctx context.Context, id int) (entity.User, error) {
 	query := `
-		SELECT
-			id, username, password,first_name,
-			last_name, email, validated_email, cellphone, validated_cellphone,
-			is_admin, created_at, updated_at, deleted_at
-		FROM
-			users
-		WHERE
-			id = $1 AND deleted_at IS NULL
-	`
+	SELECT
+		id, username, password, first_name,
+		last_name, email, validated_email, cellphone, validated_cellphone,
+		is_admin, status , created_at, updated_at, deleted_at
+	FROM
+		users
+	WHERE
+		id = $1 AND deleted_at IS NULL
+   `
 
 	stmt, err := repo.cli.PrepareContext(ctx, query)
 	if err != nil {
@@ -37,7 +37,6 @@ func (repo *User) Get(ctx context.Context, id int) (entity.User, error) {
 		&user.ID,
 		&user.Username,
 		&user.Password,
-		&user.Password,
 		&user.FirstName,
 		&user.LastName,
 		&user.Email,
@@ -45,6 +44,7 @@ func (repo *User) Get(ctx context.Context, id int) (entity.User, error) {
 		&user.Cellphone,
 		&user.ValidatedCellphone,
 		&user.Admin,
+		&user.Status,
 		&user.CreatedAt,
 		&user.UpdatedAt,
 		&user.DeletedAt,
@@ -63,7 +63,7 @@ func (repo *User) GetByUsername(ctx context.Context, username string) (entity.Us
 		SELECT
 			id, username, password, first_name,
 			last_name, email, validated_email, cellphone, validated_cellphone,
-			is_admin, created_at, updated_at, deleted_at
+			is_admin, status , created_at, updated_at, deleted_at
 		FROM
 			users
 		WHERE
@@ -80,7 +80,7 @@ func (repo *User) GetByUsername(ctx context.Context, username string) (entity.Us
 	var user entity.User
 	if err := row.Scan(&user.ID, &user.Username, &user.Password,
 		&user.FirstName, &user.LastName, &user.Email, &user.ValidatedEmail, &user.Cellphone, &user.ValidatedCellphone,
-		&user.Admin, &user.CreatedAt, &user.UpdatedAt, &user.DeletedAt,
+		&user.Admin, &user.Status, &user.CreatedAt, &user.UpdatedAt, &user.DeletedAt,
 	); err != nil {
 		if err == sql.ErrNoRows {
 			return entity.User{}, derror.NewNotFoundError("User not found")
@@ -96,13 +96,13 @@ func (repo *User) Insert(ctx context.Context, user entity.User) error {
 		INSERT INTO
 			users
 			(
-				username, password, national_id, passport_no, first_name,
+				username, password, first_name,
 				last_name, email, validated_email, cellphone, validated_cellphone,
-				is_admin, birthday, created_at, updated_at, deleted_at
+				is_admin, status , created_at, updated_at, deleted_at
 			)
 		VALUES
 			(
-				$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12,
+				$1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
 				NOW(), NOW(), NULL
 			)
 	`
@@ -111,10 +111,11 @@ func (repo *User) Insert(ctx context.Context, user entity.User) error {
 	if err != nil {
 		return fmt.Errorf("repository.User.Insert.PrepareContext: %w", err)
 	}
+	defer stmt.Close()
 
 	_, err = stmt.ExecContext(ctx, user.Username, user.Password,
 		user.FirstName, user.LastName, user.Email, user.ValidatedEmail, user.Cellphone, user.ValidatedCellphone,
-		user.Admin)
+		user.Admin, user.Status)
 	if err != nil {
 		return fmt.Errorf("repository.User.Insert.ExecContext: %w", err)
 	}
@@ -128,17 +129,16 @@ func (repo *User) Update(ctx context.Context, user entity.User) error {
 		users
 	SET
 		password = $1,
-		passport_no = $2,
-		first_name = $3,
-		last_name = $4,
-		email = $5,
-		validated_email = $6, 
-		cellphone = $7,
-		validated_cellphone = $8,
-		birthday = $9,
+		first_name = $2,
+		last_name = $3,
+		email = $4,
+		validated_email = $5, 
+		cellphone = $6,
+		validated_cellphone = $7,
+		status = $8,
 		updated_at = NOW()
 	WHERE
-		id = $10
+		id = $9
 	`
 
 	stmt, err := repo.cli.PrepareContext(ctx, query)

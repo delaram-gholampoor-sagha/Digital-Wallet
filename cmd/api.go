@@ -15,6 +15,7 @@ import (
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/user"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/transport/http"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/pkg/log"
+	"github.com/delaram-gholampoor-sagha/Digital-Wallet/pkg/utils"
 	"github.com/urfave/cli/v2"
 	"go.uber.org/automaxprocs/maxprocs"
 	"go.uber.org/zap"
@@ -89,7 +90,10 @@ func api(_ *cli.Context) (err error) {
 
 	userRepo := repository.NewUser(postgresDB)
 
-	userService := user.New(cfg.JWT, logger, userRepo)
+	// Create instances of BcryptHasher and JWTTokenGenerator
+	hasher := utils.BcryptHasher{}
+	tokenGenerator := utils.JWTTokenGenerator{}
+	userService := user.New(cfg.JWT, logger, userRepo, hasher, tokenGenerator)
 
 	// Make a channel to listen for an interrupt or terminate signal from the OS.
 	// Use a buffered channel because the signal package requires it.

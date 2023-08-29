@@ -9,6 +9,7 @@ create table public.user (
     cellphone varchar(20),
     validated_cellphone boolean default false,
     is_admin boolean default false,
+    status INT DEFAULT 1,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,

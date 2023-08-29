@@ -10,12 +10,16 @@ type Service struct {
 	cfg      config.JWT
 	logger   *zap.SugaredLogger
 	userRepo protocol.UserRepository
+	hasher   protocol.Hasher
+	tokenGen protocol.TokenGenerator
 }
 
-func New(cfg config.JWT, logger *zap.SugaredLogger, userRepo protocol.UserRepository) *Service {
+func New(cfg config.JWT, logger *zap.SugaredLogger, userRepo protocol.UserRepository, hasher protocol.Hasher, tokenGen protocol.TokenGenerator) *Service {
 	return &Service{
 		cfg:      cfg,
 		logger:   logger,
 		userRepo: userRepo,
+		hasher:   hasher,
+		tokenGen: tokenGen,
 	}
 }

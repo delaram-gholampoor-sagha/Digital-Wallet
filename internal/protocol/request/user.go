@@ -93,7 +93,6 @@ type EditProfile struct {
 	LastName  string `json:"last_name"`
 	Email     string `json:"email"`
 	Cellphone string `json:"cellphone"`
-	Birthday  int64  `json:"birthday"`
 }
 
 func (req EditProfile) Validate() error {
