@@ -12,7 +12,7 @@ func (s *Server) register(secret string, userService protocol.User) {
 	auth.POST("/sign-in", handler.SignInHandler(userService))
 	auth.POST("/refresh", handler.RefreshTokenHandler(userService), middleware.JWT(secret))
 
-	user := s.echo.Group("/user", middleware.JWT(secret))
-	user.GET("", handler.GetProfileHandler(userService))
-	user.PUT("", handler.EditProfileHandler(userService))
+	user := s.echo.Group("/account", middleware.JWT(secret))
+	user.GET("profile", handler.GetProfileHandler(userService))
+	user.PUT("profile", handler.EditProfileHandler(userService))
 }
