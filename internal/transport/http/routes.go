@@ -16,9 +16,6 @@ func (s *Server) register(secret string, userService protocol.User, bankService 
 	user.GET("profile", handler.GetProfileHandler(userService))
 	user.PUT("profile", handler.EditProfileHandler(userService))
 
-	
-	// bank/register
-	// bank/id/:id
 	bank := s.echo.Group("/bank", middleware.JWT(secret))
 	bank.POST("/register", handler.RegisterBankHandler(bankService))
 	bank.GET("/id/:id", handler.GetBankByIDHandler(bankService))

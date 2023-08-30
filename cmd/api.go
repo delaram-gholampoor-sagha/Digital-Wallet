@@ -12,6 +12,7 @@ import (
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/database/postgres"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/protocol"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/repository"
+	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/bank"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/user"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/transport/http"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/pkg/log"
@@ -89,11 +90,13 @@ func api(_ *cli.Context) (err error) {
 	}()
 
 	userRepo := repository.NewUser(postgresDB)
+	bankRepo := repository.NewBank(postgresDB)
 
 	// Create instances of BcryptHasher and JWTTokenGenerator
 	hasher := utils.BcryptHasher{}
 	tokenGenerator := utils.JWTTokenGenerator{}
 	userService := user.New(cfg.JWT, logger, userRepo, hasher, tokenGenerator)
+	bankService := bank.New(cfg.JWT, logger, bankRepo, tokenGenerator)
 
 	// Make a channel to listen for an interrupt or terminate signal from the OS.
 	// Use a buffered channel because the signal package requires it.
@@ -105,6 +108,7 @@ func api(_ *cli.Context) (err error) {
 		Logger:      logger,
 		Config:      cfg.HTTP,
 		UserService: userService,
+		BankService: bankService,
 	}
 	httpServer = http.New(serverConfig)
 

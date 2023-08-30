@@ -48,6 +48,11 @@ func IsHTTPError(err error, code int) bool {
 	return ok && derr.Code == code
 }
 
+// IsInternalError checks whether the provided error is an internal error
+func IsInternalError(err error) bool {
+	return IsHTTPError(err, http.StatusInternalServerError)
+}
+
 func IsNotFound(err error) bool {
 	derr, ok := err.(*Error)
 	return ok && derr.Code == http.StatusNotFound
