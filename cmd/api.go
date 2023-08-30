@@ -52,7 +52,7 @@ func api(_ *cli.Context) (err error) {
 	fmt.Printf("GOMAXPROCS = %d \n", runtime.GOMAXPROCS(0))
 
 	fmt.Println("initial logger")
-	logger, err := log.New("airticket", log.Config{
+	logger, err := log.New("digital-wallet", log.Config{
 		OutputPaths:       cfg.Logger.OutputPaths,
 		ErrorOutputPaths:  cfg.Logger.ErrorOutputPaths,
 		DisableStacktrace: cfg.Logger.DisableStacktrace,

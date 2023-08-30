@@ -6,4 +6,6 @@ func NewUser(database protocol.Database) *User {
 	return &User{cli: database.DB()}
 }
 
-
+func NewBank(database protocol.Database) *Bank {
+	return &Bank{cli: database.DB()}
+}

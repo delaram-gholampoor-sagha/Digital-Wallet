@@ -20,6 +20,7 @@ type (
 		Config      config.HTTP
 		Logger      *zap.SugaredLogger
 		UserService protocol.User
+		bankService protocol.Bank
 		JWTSecret   string
 	}
 )
@@ -62,6 +63,7 @@ func New(sc ServerConfig) *Server {
 	server.register(
 		sc.JWTSecret,
 		sc.UserService,
+		sc.bankService,
 	)
 
 	return server

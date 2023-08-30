@@ -9,14 +9,14 @@ import (
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/protocol/response"
 )
 
-type BankService interface {
+type Bank interface {
 	RegisterBank(ctx context.Context, req request.RegisterBank) (response.RegisterBank, error)
 	GetBankByID(ctx context.Context, bankID int) (response.GetBank, error)
 	GetBankByCode(ctx context.Context, bankCode string) (response.GetBank, error)
 	GetBankByName(ctx context.Context, bankName string) (response.GetBank, error)
 	UpdateBankDetails(ctx context.Context, req request.UpdateBank) error
 	ListAllBanks(ctx context.Context) ([]*entity.Bank, error)
-	ListBanksByStatus(ctx context.Context, status enum.BankStatus) ([]*entity.Bank, error) // List banks by a specific status.
+	ListBanksByStatus(ctx context.Context, status enum.BankStatus) ([]*entity.Bank, error) 
 }
 
 type BankRepository interface {
