@@ -145,3 +145,8 @@ func (b *Service) ListBanksByStatus(ctx context.Context, status enum.BankStatus)
 	}
 	return banks, nil
 }
+
+func (b *Service) IsBankExist(ctx context.Context, bankID int) (bool, error) {
+
+	return false, nil
+}

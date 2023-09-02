@@ -9,7 +9,7 @@ import (
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/protocol/response"
 )
 
-type BankBranchService interface {
+type BankBranch interface {
 	AddBranch(ctx context.Context, req request.AddBranch) (response.RegisterBranch, error)
 	GetBranchByID(ctx context.Context, branchID int) (response.GetBranch, error)
 	GetBranchByName(ctx context.Context, branchName string) (response.GetBranch, error)

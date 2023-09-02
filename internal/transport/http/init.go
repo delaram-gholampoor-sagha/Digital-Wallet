@@ -17,11 +17,12 @@ type (
 	}
 
 	ServerConfig struct {
-		Config      config.HTTP
-		Logger      *zap.SugaredLogger
-		UserService protocol.User
-		BankService protocol.Bank
-		JWTSecret   string
+		Config            config.HTTP
+		Logger            *zap.SugaredLogger
+		UserService       protocol.User
+		BankService       protocol.Bank
+		BankBranchService protocol.BankBranch
+		JWTSecret         string
 	}
 )
 
@@ -64,6 +65,7 @@ func New(sc ServerConfig) *Server {
 		sc.JWTSecret,
 		sc.UserService,
 		sc.BankService,
+		sc.BankBranchService,
 	)
 
 	return server

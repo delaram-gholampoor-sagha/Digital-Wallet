@@ -59,6 +59,12 @@ func (m *MockBankRepo) IsBankCodeExist(ctx context.Context, bankCode string) (bo
 	return args.Bool(0), args.Error(1)
 }
 
+
+func (m *MockBankRepo) IsBankExist(ctx context.Context, bankID int) (bool, error) {
+	args := m.Called(ctx, bankID)
+	return args.Bool(0), args.Error(1)
+}
+
 type MockBankService struct {
 	mock.Mock
 }
@@ -96,4 +102,9 @@ func (m *MockBankService) ListAllBanks(ctx context.Context) ([]*entity.Bank, err
 func (m *MockBankService) ListBanksByStatus(ctx context.Context, status enum.BankStatus) ([]*entity.Bank, error) {
 	args := m.Called(ctx, status)
 	return args.Get(0).([]*entity.Bank), args.Error(1)
+}
+
+func (m *MockBankService) IsBankExist(ctx context.Context, bankID int) (bool, error) {
+	args := m.Called(ctx, bankID)
+	return args.Bool(0), args.Error(1)
 }

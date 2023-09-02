@@ -2,7 +2,7 @@ CREATE TABLE public.bank_branche (
   branch_id SERIAL PRIMARY KEY,
   bank_id INTEGER NOT NULL REFERENCES public.bank,
   branch_name VARCHAR(100) NOT NULL,
-  branch_code VARCHAR(10),
+  branch_code VARCHAR(10) unique,
   address VARCHAR(255),
   city VARCHAR(50),
   province VARCHAR(50),

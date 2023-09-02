@@ -237,3 +237,8 @@ func (repo *Bank) IsBankCodeExist(ctx context.Context, bankCode string) (bool, e
 
 	return exists, nil
 }
+
+func (repo *Bank) IsBankExist(ctx context.Context, bankID int) (bool, error) {
+
+	return false, nil
+}
