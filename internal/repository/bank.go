@@ -14,10 +14,6 @@ type Bank struct {
 	cli *sql.DB
 }
 
-func NewBankRepository(cli *sql.DB) *Bank {
-	return &Bank{cli}
-}
-
 func (repo *Bank) GetByID(ctx context.Context, bankID int) (*entity.Bank, error) {
 	query := `
 		SELECT

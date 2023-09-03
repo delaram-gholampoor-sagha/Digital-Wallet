@@ -7,7 +7,7 @@ import (
 )
 
 type FinancialCard struct {
-	CardID         int64
+	CardID         int
 	AccountID      int
 	CardNumber     string
 	CardType       enum.FinancialCardType

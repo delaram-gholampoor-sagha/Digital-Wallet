@@ -13,13 +13,6 @@ type BankBranch struct {
 	cli *sql.DB
 }
 
-func NewBankBranchRepository(cli *sql.DB) *BankBranch {
-	return &BankBranch{cli}
-}
-
-// Below are the implementations of the BankBranchRepository methods.
-
-// GetByID retrieves a BankBranch by its ID
 func (repo *BankBranch) GetByID(ctx context.Context, branchID int) (*entity.BankBranch, error) {
 	query := `
 		SELECT
@@ -64,7 +57,6 @@ func (repo *BankBranch) GetByID(ctx context.Context, branchID int) (*entity.Bank
 	return &branch, nil
 }
 
-// GetByName retrieves a BankBranch by its name
 func (repo *BankBranch) GetByName(ctx context.Context, branchName string) (*entity.BankBranch, error) {
 	query := `
 		SELECT
@@ -109,7 +101,6 @@ func (repo *BankBranch) GetByName(ctx context.Context, branchName string) (*enti
 	return &branch, nil
 }
 
-// GetByCode retrieves a BankBranch by its code
 func (repo *BankBranch) GetByCode(ctx context.Context, branchCode string) (*entity.BankBranch, error) {
 	query := `
 		SELECT
@@ -153,7 +144,6 @@ func (repo *BankBranch) GetByCode(ctx context.Context, branchCode string) (*enti
 	return &branch, nil
 }
 
-// Insert adds a new BankBranch to the database
 func (repo *BankBranch) Insert(ctx context.Context, branch *entity.BankBranch) error {
 	query := `
 		INSERT INTO bank_branch (bank_id, branch_name, branch_code, address,
@@ -185,7 +175,6 @@ func (repo *BankBranch) Insert(ctx context.Context, branch *entity.BankBranch) e
 	return nil
 }
 
-// Update modifies an existing BankBranch in the database
 func (repo *BankBranch) Update(ctx context.Context, branch *entity.BankBranch) error {
 	query := `
 		UPDATE bank_branch
@@ -219,7 +208,6 @@ func (repo *BankBranch) Update(ctx context.Context, branch *entity.BankBranch) e
 	return nil
 }
 
-// Delete removes a BankBranch from the database
 func (repo *BankBranch) Delete(ctx context.Context, branchID int) error {
 	query := "UPDATE bank_branch SET deleted_at = CURRENT_TIMESTAMP WHERE branch_id = $1"
 	stmt, err := repo.cli.PrepareContext(ctx, query)
@@ -236,7 +224,6 @@ func (repo *BankBranch) Delete(ctx context.Context, branchID int) error {
 	return nil
 }
 
-// ListAll retrieves all BankBranches from the database
 func (repo *BankBranch) ListAll(ctx context.Context) ([]*entity.BankBranch, error) {
 	query := `
 		SELECT branch_id, bank_id, branch_name, branch_code, address, city, province, 
@@ -314,7 +301,6 @@ func (repo *BankBranch) ListByStatus(ctx context.Context, status enum.BankBranch
 	return branches, nil
 }
 
-// ListByBankID retrieves all BankBranches for a specific BankID from the database
 func (repo *BankBranch) ListByBankID(ctx context.Context, bankID int) ([]*entity.BankBranch, error) {
 	query := `
 		SELECT branch_id, bank_id, branch_name, branch_code, address, city, province, 
@@ -353,7 +339,6 @@ func (repo *BankBranch) ListByBankID(ctx context.Context, bankID int) ([]*entity
 	return branches, nil
 }
 
-// IsBranchCodeExist checks if a BankBranch code already exists in the database
 func (repo *BankBranch) IsBranchCodeExist(ctx context.Context, branchCode string) (bool, error) {
 	query := "SELECT COUNT(*) FROM bank_branch WHERE branch_code = $1 AND deleted_at IS NULL"
 	var count int

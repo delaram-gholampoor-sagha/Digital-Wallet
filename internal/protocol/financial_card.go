@@ -8,7 +8,7 @@ import (
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/protocol/request"
 )
 
-type FinancialCardService interface {
+type FinancialCard interface {
 	RegisterCard(ctx context.Context, req *request.RegisterFinancialCard) (Id int, err error)
 	UpdateCard(ctx context.Context, req *request.UpdateFinancialCard) error
 	DeleteCard(ctx context.Context, cardID int64) error

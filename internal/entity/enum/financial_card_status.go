@@ -8,3 +8,13 @@ const (
 	Lost
 	Stolen
 )
+
+// IsValid checks if the given FinancialCardStatus is valid.
+func IsValidFinancialCardStatus(s FinancialCardStatus) bool {
+	switch s {
+	case Active, Inactive, Lost, Stolen:
+		return true
+	default:
+		return false
+	}
+}

@@ -9,9 +9,10 @@ import (
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/protocol/response"
 )
 
-type FinancialAccountService interface {
+type FinancialAccount interface {
 	CreateAccount(ctx context.Context, req request.RegisterFinancialAccount) (response.RegisterFinancialAccount, error)
 	GetAccountByID(ctx context.Context, accountID int) (response.GetFinancialAccount, error)
+	IsAccountExist(ctx context.Context, accountID int) (bool, error)
 	UpdateAccount(ctx context.Context, req request.UpdateFinancialAccount) error
 	DeleteAccount(ctx context.Context, accountID int) error
 	ListAccountsByUserID(ctx context.Context, userID int) ([]*entity.FinancialAccount, error)
@@ -29,6 +30,7 @@ type FinancialAccountService interface {
 type FinancialAccountRepository interface {
 	GetByID(ctx context.Context, accountID int) (*entity.FinancialAccount, error)
 	GetByUserID(ctx context.Context, userID int) ([]*entity.FinancialAccount, error)
+	IsAccountExist(ctx context.Context, accountID int) (bool, error)
 	Insert(ctx context.Context, account *entity.FinancialAccount) error
 	Update(ctx context.Context, account *entity.FinancialAccount) error
 	Delete(ctx context.Context, accountID int) error

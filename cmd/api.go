@@ -14,6 +14,8 @@ import (
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/repository"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/bank"
 	bankbranch "github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/bank_branch"
+	financialaccount "github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/financial_account"
+	financialcard "github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/financial_card"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/user"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/transport/http"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/pkg/log"
@@ -93,6 +95,7 @@ func api(_ *cli.Context) (err error) {
 	userRepo := repository.NewUser(postgresDB)
 	bankRepo := repository.NewBank(postgresDB)
 	bankBranchRepo := repository.NewBankBranch(postgresDB)
+	financialCardRepo := repository.NewFinancialCard(postgresDB)
 
 	// Create instances of BcryptHasher and JWTTokenGenerator
 	hasher := utils.BcryptHasher{}
@@ -100,6 +103,8 @@ func api(_ *cli.Context) (err error) {
 	userService := user.New(cfg.JWT, logger, userRepo, hasher, tokenGenerator)
 	bankService := bank.New(cfg.JWT, logger, bankRepo, tokenGenerator)
 	bankBranchService := bankbranch.New(cfg.JWT, logger, bankBranchRepo, tokenGenerator, bankService)
+	financialAccountService := financialaccount.New(cfg.JWT, logger, tokenGenerator)
+	financialCardService := financialcard.New(cfg.JWT, logger, financialCardRepo, tokenGenerator, financialAccountService)
 
 	// Make a channel to listen for an interrupt or terminate signal from the OS.
 	// Use a buffered channel because the signal package requires it.
@@ -108,11 +113,12 @@ func api(_ *cli.Context) (err error) {
 
 	// server init
 	serverConfig := http.ServerConfig{
-		Logger:            logger,
-		Config:            cfg.HTTP,
-		UserService:       userService,
-		BankService:       bankService,
-		BankBranchService: bankBranchService,
+		Logger:               logger,
+		Config:               cfg.HTTP,
+		UserService:          userService,
+		BankService:          bankService,
+		BankBranchService:    bankBranchService,
+		FinancialCardService: financialCardService,
 	}
 	httpServer = http.New(serverConfig)
 

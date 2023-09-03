@@ -10,7 +10,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-func (s *Server) register(secret string, userService protocol.User, bankService protocol.Bank, bankBranchService protocol.BankBranch) {
+func (s *Server) register(secret string, userService protocol.User, bankService protocol.Bank, bankBranchService protocol.BankBranch, financialCardService protocol.FinancialCard) {
 
 	logConfig := log.Config{
 		OutputPaths:       []string{"stdout"},
@@ -26,6 +26,7 @@ func (s *Server) register(secret string, userService protocol.User, bankService 
 	}
 
 	bankBranchHandler := handler.NewBranchHandler(logger, bankBranchService)
+	financialCardHandler := handler.NewFinancialCardHandler(logger, financialCardService)
 
 	auth := s.echo.Group("/auth")
 	auth.POST("/sign-up", handler.SignUpHandler(userService))
@@ -56,5 +57,14 @@ func (s *Server) register(secret string, userService protocol.User, bankService 
 	branch.GET("/list", bankBranchHandler.ListAllBranchesHandler(bankBranchService))
 	branch.GET("/status/:status", bankBranchHandler.ListBranchesByStatusHandler(bankBranchService))
 	branch.GET("/listByBank/:id", bankBranchHandler.ListBranchesByBankIDHandler(bankBranchService))
+
+	// Adding new group for financial-card
+	card := s.echo.Group("/card", middleware.JWT(secret))
+	card.POST("/register", financialCardHandler.RegisterCardHandler)
+	card.PUT("/update", financialCardHandler.UpdateCardHandler)
+	card.DELETE("/delete/:id", financialCardHandler.DeleteCardHandler)
+	card.GET("/id/:id", financialCardHandler.GetCardByIDHandler)
+	card.GET("/listByAccount/:id", financialCardHandler.ListCardsByAccountIDHandler)
+	card.GET("/listByType/:type", financialCardHandler.ListCardsByTypeHandler)
 
 }
