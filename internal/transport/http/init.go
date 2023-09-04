@@ -23,6 +23,7 @@ type (
 		BankService          protocol.Bank
 		BankBranchService    protocol.BankBranch
 		FinancialCardService protocol.FinancialCard
+		CurrencyService      protocol.Currency
 		JWTSecret            string
 	}
 )
@@ -68,6 +69,7 @@ func New(sc ServerConfig) *Server {
 		sc.BankService,
 		sc.BankBranchService,
 		sc.FinancialCardService,
+		sc.CurrencyService,
 	)
 
 	return server

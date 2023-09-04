@@ -14,6 +14,7 @@ import (
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/repository"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/bank"
 	bankbranch "github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/bank_branch"
+	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/currency"
 	financialaccount "github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/financial_account"
 	financialcard "github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/financial_card"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/user"
@@ -96,6 +97,7 @@ func api(_ *cli.Context) (err error) {
 	bankRepo := repository.NewBank(postgresDB)
 	bankBranchRepo := repository.NewBankBranch(postgresDB)
 	financialCardRepo := repository.NewFinancialCard(postgresDB)
+	currencyRepo := repository.NewCurrency(postgresDB)
 
 	// Create instances of BcryptHasher and JWTTokenGenerator
 	hasher := utils.BcryptHasher{}
@@ -104,6 +106,7 @@ func api(_ *cli.Context) (err error) {
 	bankService := bank.New(cfg.JWT, logger, bankRepo, tokenGenerator)
 	bankBranchService := bankbranch.New(cfg.JWT, logger, bankBranchRepo, tokenGenerator, bankService)
 	financialAccountService := financialaccount.New(cfg.JWT, logger, tokenGenerator)
+	currencyService := currency.New(cfg.JWT, logger, tokenGenerator, currencyRepo)
 	financialCardService := financialcard.New(cfg.JWT, logger, financialCardRepo, tokenGenerator, financialAccountService)
 
 	// Make a channel to listen for an interrupt or terminate signal from the OS.
@@ -119,6 +122,7 @@ func api(_ *cli.Context) (err error) {
 		BankService:          bankService,
 		BankBranchService:    bankBranchService,
 		FinancialCardService: financialCardService,
+		CurrencyService:      currencyService,
 	}
 	httpServer = http.New(serverConfig)
 

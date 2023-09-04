@@ -10,7 +10,12 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-func (s *Server) register(secret string, userService protocol.User, bankService protocol.Bank, bankBranchService protocol.BankBranch, financialCardService protocol.FinancialCard) {
+func (s *Server) register(secret string, userService protocol.User,
+	bankService protocol.Bank,
+	bankBranchService protocol.BankBranch,
+	financialCardService protocol.FinancialCard,
+	currencyService protocol.Currency,
+) {
 
 	logConfig := log.Config{
 		OutputPaths:       []string{"stdout"},
@@ -27,6 +32,7 @@ func (s *Server) register(secret string, userService protocol.User, bankService 
 
 	bankBranchHandler := handler.NewBranchHandler(logger, bankBranchService)
 	financialCardHandler := handler.NewFinancialCardHandler(logger, financialCardService)
+	currencyHandler := handler.NewCurrencyHandler(logger, currencyService)
 
 	auth := s.echo.Group("/auth")
 	auth.POST("/sign-up", handler.SignUpHandler(userService))
@@ -66,5 +72,24 @@ func (s *Server) register(secret string, userService protocol.User, bankService 
 	card.GET("/id/:id", financialCardHandler.GetCardByIDHandler)
 	card.GET("/listByAccount/:id", financialCardHandler.ListCardsByAccountIDHandler)
 	card.GET("/listByType/:type", financialCardHandler.ListCardsByTypeHandler)
+
+	// Adding new group for currency
+	currency := s.echo.Group("/currency", middleware.JWT(secret))
+	currency.POST("/add", currencyHandler.AddCurrencyHandler)
+	currency.PUT("/update", currencyHandler.UpdateCurrencyHandler)
+	currency.DELETE("/delete/:id", currencyHandler.DeleteCurrencyHandler)
+	currency.GET("/id/:id", currencyHandler.GetCurrencyByIDHandler)
+	currency.GET("/name/:name", currencyHandler.GetCurrencyByNameHandler)
+	currency.GET("/list", currencyHandler.ListCurrenciesHandler)
+	currency.GET("/exchangeRate/:fromCode/:toCode", currencyHandler.GetExchangeRateHandler)
+	currency.PUT("/bulkUpdateExchangeRates", currencyHandler.BulkUpdateExchangeRatesHandler)
+	currency.GET("/search/:query", currencyHandler.SearchCurrenciesHandler)
+	currency.GET("/convert/:fromCode/:toCode/:amount", currencyHandler.ConvertAmountHandler)
+	currency.GET("/compare/:firstCode/:secondCode", currencyHandler.CompareCurrenciesHandler)
+	currency.GET("/trends/:code/:duration", currencyHandler.GetCurrencyTrendsHandler)
+	currency.GET("/strongest", currencyHandler.GetStrongestCurrencyHandler)
+	currency.GET("/weakest", currencyHandler.GetWeakestCurrencyHandler)
+	currency.PUT("/notifyUsersOnExchangeRateChange/:threshold", currencyHandler.NotifyUsersOnExchangeRateChangeHandler)
+	currency.GET("/countries/:code", currencyHandler.GetCountriesUsingCurrencyHandler)
 
 }

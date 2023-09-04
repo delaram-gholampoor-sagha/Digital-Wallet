@@ -10,7 +10,7 @@ import (
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/protocol/response"
 )
 
-type CurrencyService interface {
+type Currency interface {
 	AddCurrency(ctx context.Context, req request.AddCurrency) (response.AddCurrency, error)
 	UpdateCurrency(ctx context.Context, req request.UpdateCurrency) error
 	DeleteCurrency(ctx context.Context, currencyID int) error
@@ -48,8 +48,8 @@ type CurrencyService interface {
 }
 
 type CurrencyRepository interface {
-	Insert(ctx context.Context, c entity.Currency) error
-	Update(ctx context.Context, c entity.Currency) error
+	Insert(ctx context.Context, currency entity.Currency) error
+	Update(ctx context.Context, currency entity.Currency) error
 	Delete(ctx context.Context, currencyID int) error
 	Get(ctx context.Context, currencyID int) (entity.Currency, error)
 	GetByCode(ctx context.Context, code enum.CurrencyCode) (entity.Currency, error)

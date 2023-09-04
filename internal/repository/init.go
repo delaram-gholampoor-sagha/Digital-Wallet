@@ -17,3 +17,7 @@ func NewBankBranch(database protocol.Database) *BankBranch {
 func NewFinancialCard(database protocol.Database) *FinancialCard {
 	return &FinancialCard{cli: database.DB()}
 }
+
+func NewCurrency(database protocol.Database) *Currency {
+	return &Currency{cli: database.DB()}
+}
