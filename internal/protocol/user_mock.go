@@ -82,3 +82,8 @@ func (m *MockUserRepository) EditProfile(ctx context.Context, req request.EditPr
 	args := m.Called(ctx, req)
 	return args.Error(0)
 }
+
+func (m *MockUserRepository) IsUserExist(ctx context.Context, userID int) (bool, error) {
+	args := m.Called(ctx, userID)
+	return args.Bool(0), args.Error(1)
+}

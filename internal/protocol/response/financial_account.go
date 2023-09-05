@@ -29,9 +29,9 @@ type GetFinancialAccount struct {
 
 type GetCurrency struct {
 	CurrencyID   int
-	CurrencyCode string
-	CurrencyName string
-	Symbol       string
+	CurrencyCode enum.CurrencyCode
+	CurrencyName enum.CurrencyName
+	Symbol       enum.CurrencySymbol
 	ExchangeRate *float64
 	CreatedAt    time.Time
 	UpdatedAt    time.Time

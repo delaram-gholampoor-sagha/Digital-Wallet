@@ -15,6 +15,7 @@ type User interface {
 	GetProfile(ctx context.Context, userID int) (response.GetProfile, error)
 	EditProfile(ctx context.Context, req request.EditProfile) error
 	Get(ctx context.Context, id int) (entity.User, error)
+	IsUserExist(ctx context.Context, userID int) (bool, error)
 }
 
 type UserRepository interface {
@@ -24,4 +25,5 @@ type UserRepository interface {
 	Update(ctx context.Context, u entity.User) error
 	IsUsernameExist(ctx context.Context, username string) (bool, error)
 	IsExist(ctx context.Context, id int) (bool, error)
+	IsUserExist(ctx context.Context, userID int) (bool, error)
 }

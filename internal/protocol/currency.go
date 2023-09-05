@@ -18,6 +18,7 @@ type Currency interface {
 	GetCurrencyByName(ctx context.Context, currencyName enum.CurrencyName) (entity.Currency, error)
 	ListCurrencies(ctx context.Context) ([]entity.Currency, error)
 	GetExchangeRate(ctx context.Context, fromCode enum.CurrencyCode, toCode enum.CurrencyCode) (float64, error)
+	IsCurrrencyExist(ctx context.Context, currencyID int) (bool, error)
 
 	// Update exchange rates for multiple currencies at once.
 	BulkUpdateExchangeRates(ctx context.Context, rates map[enum.CurrencyCode]float64) error
@@ -56,6 +57,7 @@ type CurrencyRepository interface {
 	GetByName(ctx context.Context, name enum.CurrencyName) (entity.Currency, error)
 	List(ctx context.Context) ([]entity.Currency, error)
 	IsCodeExist(ctx context.Context, code enum.CurrencyCode) (bool, error)
+	IsCurrrencyExist(ctx context.Context, currencyID int) (bool, error)
 
 	// Insert or update multiple currencies at once, useful for bulk operations, especially if you're syncing with an external source.
 	BulkInsert(ctx context.Context, currencies []entity.Currency) error

@@ -219,3 +219,8 @@ func (repo *User) IsExist(ctx context.Context, id int) (bool, error) {
 
 	return true, nil
 }
+
+func (repo *User) IsUserExist(ctx context.Context, userID int) (bool, error) {
+
+	return false, nil
+}

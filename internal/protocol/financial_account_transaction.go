@@ -8,7 +8,7 @@ import (
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/protocol/response"
 )
 
-type AccountTransactionService interface {
+type AccountTransaction interface {
 	RegisterTransaction(ctx context.Context, req *request.RegisterTransactionRequest) (*response.RegisterTransactionResponse, error)
 	DeleteTransaction(ctx context.Context, transactionID int64) error
 	GetTransactionByID(ctx context.Context, transactionID int64) (*entity.FinancialAccountTransaction, error)

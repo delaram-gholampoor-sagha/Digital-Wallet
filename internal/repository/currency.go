@@ -365,3 +365,8 @@ func (repo *Currency) ListCountriesByCurrencyCode(ctx context.Context, code enum
 	}
 	return countries, nil
 }
+
+func (repo *Currency) IsCurrrencyExist(ctx context.Context, currencyID int) (bool, error) {
+
+	return false, nil
+}

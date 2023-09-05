@@ -353,3 +353,8 @@ func (repo *BankBranch) IsBranchCodeExist(ctx context.Context, branchCode string
 
 	return count > 0, nil
 }
+
+func (repo *BankBranch) IsBankBranchExist(ctx context.Context, bankBranchID int) (bool, error) {
+
+	return false, nil
+}

@@ -287,3 +287,7 @@ func (s *Service) GetCountriesUsingCurrency(ctx context.Context, code enum.Curre
 	s.logger.Info("Successfully fetched countries using the currency", zap.String("CurrencyCode", string(code)), zap.Strings("countries", countries))
 	return countries, nil
 }
+
+func (s *Service) IsCurrrencyExist(ctx context.Context, currencyID int) (bool, error) {
+	return false, nil
+}

@@ -14,6 +14,7 @@ type BankBranch interface {
 	GetBranchByID(ctx context.Context, branchID int) (response.GetBranch, error)
 	GetBranchByName(ctx context.Context, branchName string) (response.GetBranch, error)
 	GetBranchByCode(ctx context.Context, branchCode string) (response.GetBranch, error)
+	IsBankBranchExist(ctx context.Context, bankBranchID int) (bool, error)
 	UpdateBranch(ctx context.Context, req request.UpdateBranch) error
 	DeleteBranch(ctx context.Context, branchID int) error
 	ListAllBranches(ctx context.Context) ([]*entity.BankBranch, error)
@@ -32,4 +33,5 @@ type BankBranchRepository interface {
 	ListByStatus(ctx context.Context, status enum.BankBranchStatus) ([]*entity.BankBranch, error)
 	ListByBankID(ctx context.Context, bankID int) ([]*entity.BankBranch, error)
 	IsBranchCodeExist(ctx context.Context, branchCode string) (bool, error)
+	IsBankBranchExist(ctx context.Context, bankBranchID int) (bool, error)
 }

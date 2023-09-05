@@ -251,7 +251,7 @@ func (s *Service) ListBranchesByBankID(ctx context.Context, bankID int) ([]*enti
 const deleteBranchMethod = "DeleteBranch"
 
 func (s *Service) DeleteBranch(ctx context.Context, branchID int) error {
-	// Check if the branch exists
+
 	branch, err := s.bankBranchRepo.GetByID(ctx, branchID)
 	if err != nil {
 		s.logger.Error("Failed to get branch by ID",
@@ -261,12 +261,10 @@ func (s *Service) DeleteBranch(ctx context.Context, branchID int) error {
 		return derror.NewInternalSystemError()
 	}
 
-	// If the branch does not exist, return an error
 	if branch == nil {
 		return derror.NewNotFoundError("Branch not found")
 	}
 
-	// Delete the branch
 	if err := s.bankBranchRepo.Delete(ctx, branchID); err != nil {
 		s.logger.Error("Failed to delete branch",
 			zap.Error(err),
@@ -276,4 +274,9 @@ func (s *Service) DeleteBranch(ctx context.Context, branchID int) error {
 	}
 
 	return nil
+}
+
+func (s *Service) IsBankBranchExist(ctx context.Context, bankBranchID int) (bool, error) {
+
+	return false, nil
 }

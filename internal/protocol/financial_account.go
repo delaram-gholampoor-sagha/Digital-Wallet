@@ -15,7 +15,7 @@ type FinancialAccount interface {
 	IsAccountExist(ctx context.Context, accountID int) (bool, error)
 	UpdateAccount(ctx context.Context, req request.UpdateFinancialAccount) error
 	DeleteAccount(ctx context.Context, accountID int) error
-	ListAccountsByUserID(ctx context.Context, userID int) ([]*entity.FinancialAccount, error)
+	ListAccountsByUserID(ctx context.Context, userID int) ([]entity.FinancialAccount, error)
 	ListAccountsByStatus(ctx context.Context, status enum.FinancialAccountStatus) ([]*entity.FinancialAccount, error)
 
 	VerifyAccount(ctx context.Context, accountID int) error
@@ -29,12 +29,13 @@ type FinancialAccount interface {
 
 type FinancialAccountRepository interface {
 	GetByID(ctx context.Context, accountID int) (*entity.FinancialAccount, error)
-	GetByUserID(ctx context.Context, userID int) ([]*entity.FinancialAccount, error)
+	GetByUserID(ctx context.Context, userID int) ([]entity.FinancialAccount, error)
 	IsAccountExist(ctx context.Context, accountID int) (bool, error)
 	Insert(ctx context.Context, account *entity.FinancialAccount) error
 	Update(ctx context.Context, account *entity.FinancialAccount) error
 	Delete(ctx context.Context, accountID int) error
 	ListByStatus(ctx context.Context, status enum.FinancialAccountStatus) ([]*entity.FinancialAccount, error)
+	UpdateStatus(ctx context.Context, accountID int, status string) error
 
 	GetByShabaNumber(ctx context.Context, shabaNumber string) (*entity.FinancialAccount, error)
 	GetTransactions(ctx context.Context, accountID int) ([]*entity.FinancialAccountTransaction, error)

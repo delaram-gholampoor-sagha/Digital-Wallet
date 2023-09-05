@@ -21,3 +21,11 @@ func NewFinancialCard(database protocol.Database) *FinancialCard {
 func NewCurrency(database protocol.Database) *Currency {
 	return &Currency{cli: database.DB()}
 }
+
+func NewFinancialAccount(database protocol.Database) *FinancialAccount {
+	return &FinancialAccount{cli: database.DB()}
+}
+
+func NewAccountTransaction(database protocol.Database) *AccountTransaction {
+	return &AccountTransaction{cli: database.DB()}
+}

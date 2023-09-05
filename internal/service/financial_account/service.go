@@ -7,15 +7,36 @@ import (
 )
 
 type Service struct {
-	cfg      config.JWT
-	logger   *zap.SugaredLogger
-	tokenGen protocol.TokenGenerator
+	cfg                                config.JWT
+	logger                             *zap.SugaredLogger
+	tokenGen                           protocol.TokenGenerator
+	bankService                        protocol.Bank
+	bankBranchService                  protocol.BankBranch
+	userService                        protocol.User
+	currencyService                    protocol.Currency
+	financialAccountTransactionService protocol.AccountTransaction
+	financialAccountRepo               protocol.FinancialAccountRepository
 }
 
-func New(cfg config.JWT, logger *zap.SugaredLogger, tokenGen protocol.TokenGenerator) *Service {
+func New(cfg config.JWT,
+	logger *zap.SugaredLogger,
+	tokenGen protocol.TokenGenerator,
+	financialAccountRepo protocol.FinancialAccountRepository,
+	bankService protocol.Bank,
+	bankBranchService protocol.BankBranch,
+	userService protocol.User,
+	currencyService protocol.Currency,
+	financialAccountTransactionService protocol.AccountTransaction,
+) *Service {
 	return &Service{
-		cfg:      cfg,
-		logger:   logger,
-		tokenGen: tokenGen,
+		cfg:                                cfg,
+		logger:                             logger,
+		tokenGen:                           tokenGen,
+		financialAccountRepo:               financialAccountRepo,
+		bankService:                        bankService,
+		bankBranchService:                  bankBranchService,
+		userService:                        userService,
+		currencyService:                    currencyService,
+		financialAccountTransactionService: financialAccountTransactionService,
 	}
 }

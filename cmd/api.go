@@ -12,6 +12,7 @@ import (
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/database/postgres"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/protocol"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/repository"
+	accounttransaction "github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/account_transaction"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/bank"
 	bankbranch "github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/bank_branch"
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/service/currency"
@@ -98,6 +99,8 @@ func api(_ *cli.Context) (err error) {
 	bankBranchRepo := repository.NewBankBranch(postgresDB)
 	financialCardRepo := repository.NewFinancialCard(postgresDB)
 	currencyRepo := repository.NewCurrency(postgresDB)
+	financialAccountRepo := repository.NewFinancialAccount(postgresDB)
+	accountTransactionRepo := repository.NewAccountTransaction(postgresDB)
 
 	// Create instances of BcryptHasher and JWTTokenGenerator
 	hasher := utils.BcryptHasher{}
@@ -105,8 +108,16 @@ func api(_ *cli.Context) (err error) {
 	userService := user.New(cfg.JWT, logger, userRepo, hasher, tokenGenerator)
 	bankService := bank.New(cfg.JWT, logger, bankRepo, tokenGenerator)
 	bankBranchService := bankbranch.New(cfg.JWT, logger, bankBranchRepo, tokenGenerator, bankService)
-	financialAccountService := financialaccount.New(cfg.JWT, logger, tokenGenerator)
+	accountTransactionService := accounttransaction.New(cfg.JWT, logger, tokenGenerator, accountTransactionRepo)
 	currencyService := currency.New(cfg.JWT, logger, tokenGenerator, currencyRepo)
+	financialAccountService := financialaccount.New(cfg.JWT, logger,
+		tokenGenerator,
+		financialAccountRepo,
+		bankService,
+		bankBranchService,
+		userService,
+		currencyService,
+		accountTransactionService)
 	financialCardService := financialcard.New(cfg.JWT, logger, financialCardRepo, tokenGenerator, financialAccountService)
 
 	// Make a channel to listen for an interrupt or terminate signal from the OS.
@@ -123,6 +134,8 @@ func api(_ *cli.Context) (err error) {
 		BankBranchService:    bankBranchService,
 		FinancialCardService: financialCardService,
 		CurrencyService:      currencyService,
+		FinancialAccount:     financialAccountService,
+		AccountTransaction:   accountTransactionService,
 	}
 	httpServer = http.New(serverConfig)
 

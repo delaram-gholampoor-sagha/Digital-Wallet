@@ -15,6 +15,7 @@ func (s *Server) register(secret string, userService protocol.User,
 	bankBranchService protocol.BankBranch,
 	financialCardService protocol.FinancialCard,
 	currencyService protocol.Currency,
+	financialAccountSerrvice protocol.FinancialAccount,
 ) {
 
 	logConfig := log.Config{
@@ -33,6 +34,7 @@ func (s *Server) register(secret string, userService protocol.User,
 	bankBranchHandler := handler.NewBranchHandler(logger, bankBranchService)
 	financialCardHandler := handler.NewFinancialCardHandler(logger, financialCardService)
 	currencyHandler := handler.NewCurrencyHandler(logger, currencyService)
+	financialAccountHandler := handler.NewFinancialAccountHandler(logger, financialAccountSerrvice)
 
 	auth := s.echo.Group("/auth")
 	auth.POST("/sign-up", handler.SignUpHandler(userService))
@@ -91,5 +93,21 @@ func (s *Server) register(secret string, userService protocol.User,
 	currency.GET("/weakest", currencyHandler.GetWeakestCurrencyHandler)
 	currency.PUT("/notifyUsersOnExchangeRateChange/:threshold", currencyHandler.NotifyUsersOnExchangeRateChangeHandler)
 	currency.GET("/countries/:code", currencyHandler.GetCountriesUsingCurrencyHandler)
+
+	// Adding new group for financial-account
+	account := s.echo.Group("/account", middleware.JWT(secret))
+	account.POST("/register", financialAccountHandler.CreateAccountHandler)
+	account.GET("/id/:id", financialAccountHandler.GetAccountByIDHandler)
+	account.PUT("/update", financialAccountHandler.UpdateAccountHandler)
+	account.DELETE("/delete/:id", financialAccountHandler.DeleteAccountHandler)
+	account.GET("/listByUserID/:userID", financialAccountHandler.ListAccountsByUserIDHandler)
+	account.GET("/listByStatus/:status", financialAccountHandler.ListAccountsByStatusHandler)
+	account.GET("/verify/:id", financialAccountHandler.VerifyAccountHandler)
+	account.GET("/shaba/:shabaNumber", financialAccountHandler.GetAccountByShabaHandler)
+	account.GET("/transactionHistory/:id", financialAccountHandler.GetAccountTransactionHistoryHandler)
+	account.GET("/listByType/:type", financialAccountHandler.ListAccountsByTypeHandler)
+	account.GET("/currency/:id", financialAccountHandler.GetAccountCurrencyHandler)
+	account.GET("/branch/:id", financialAccountHandler.GetBranchForAccountHandler)
+	account.GET("/bank/:id", financialAccountHandler.GetBankForAccountHandler)
 
 }

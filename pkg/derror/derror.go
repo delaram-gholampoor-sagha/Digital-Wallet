@@ -57,3 +57,8 @@ func IsNotFound(err error) bool {
 	derr, ok := err.(*Error)
 	return ok && derr.Code == http.StatusNotFound
 }
+
+// NewValidationError creates a 422 Unprocessable Entity or 400 Bad Request error.
+func NewValidationError(msg string, args ...interface{}) error {
+	return NewError(msg, http.StatusUnprocessableEntity, args...) // or http.StatusBadRequest if you prefer
+}

@@ -7,7 +7,7 @@ import (
 )
 
 type FinancialAccount struct {
-	AccountID     int64
+	AccountID     int
 	UserID        int
 	CurrencyID    int
 	BankID        int
