@@ -7,13 +7,13 @@ import (
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/entity/enum"
 )
 
-type RegisterTransactionResponse struct {
+type RegisterCardTransactionResponse struct {
 	TransactionID int
-	Status        enum.FinancialAccountTransactionStatus
+	Status        enum.CardTransactionStatus
 	CreatedAt     time.Time
 }
 
-type TransferResponse struct {
-	SenderTx   entity.FinancialAccountTransaction
-	ReceiverTx entity.FinancialAccountTransaction
+type Transfer struct {
+	SenderTx   entity.CardTransaction
+	ReceiverTx entity.CardTransaction
 }

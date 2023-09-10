@@ -107,17 +107,16 @@ func api(_ *cli.Context) (err error) {
 	tokenGenerator := utils.JWTTokenGenerator{}
 	userService := user.New(cfg.JWT, logger, userRepo, hasher, tokenGenerator)
 	bankService := bank.New(cfg.JWT, logger, bankRepo, tokenGenerator)
-	bankBranchService := bankbranch.New(cfg.JWT, logger, bankBranchRepo, tokenGenerator, bankService)
-	accountTransactionService := accounttransaction.New(cfg.JWT, logger, tokenGenerator, accountTransactionRepo)
 	currencyService := currency.New(cfg.JWT, logger, tokenGenerator, currencyRepo)
+	bankBranchService := bankbranch.New(cfg.JWT, logger, bankBranchRepo, tokenGenerator, bankService)
 	financialAccountService := financialaccount.New(cfg.JWT, logger,
 		tokenGenerator,
 		financialAccountRepo,
 		bankService,
 		bankBranchService,
 		userService,
-		currencyService,
-		accountTransactionService)
+		currencyService)
+	accountTransactionService := accounttransaction.New(cfg.JWT, logger, tokenGenerator, financialAccountService, accountTransactionRepo)
 	financialCardService := financialcard.New(cfg.JWT, logger, financialCardRepo, tokenGenerator, financialAccountService)
 
 	// Make a channel to listen for an interrupt or terminate signal from the OS.

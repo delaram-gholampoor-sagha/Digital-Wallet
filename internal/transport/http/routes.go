@@ -16,6 +16,7 @@ func (s *Server) register(secret string, userService protocol.User,
 	financialCardService protocol.FinancialCard,
 	currencyService protocol.Currency,
 	financialAccountSerrvice protocol.FinancialAccount,
+	accountTransactionService protocol.AccountTransaction,
 ) {
 
 	logConfig := log.Config{
@@ -35,6 +36,7 @@ func (s *Server) register(secret string, userService protocol.User,
 	financialCardHandler := handler.NewFinancialCardHandler(logger, financialCardService)
 	currencyHandler := handler.NewCurrencyHandler(logger, currencyService)
 	financialAccountHandler := handler.NewFinancialAccountHandler(logger, financialAccountSerrvice)
+	accountTransactionHandler := handler.NewAccountTransactionHandler(logger, accountTransactionService)
 
 	auth := s.echo.Group("/auth")
 	auth.POST("/sign-up", handler.SignUpHandler(userService))
@@ -104,10 +106,21 @@ func (s *Server) register(secret string, userService protocol.User,
 	account.GET("/listByStatus/:status", financialAccountHandler.ListAccountsByStatusHandler)
 	account.GET("/verify/:id", financialAccountHandler.VerifyAccountHandler)
 	account.GET("/shaba/:shabaNumber", financialAccountHandler.GetAccountByShabaHandler)
-	account.GET("/transactionHistory/:id", financialAccountHandler.GetAccountTransactionHistoryHandler)
+
 	account.GET("/listByType/:type", financialAccountHandler.ListAccountsByTypeHandler)
 	account.GET("/currency/:id", financialAccountHandler.GetAccountCurrencyHandler)
 	account.GET("/branch/:id", financialAccountHandler.GetBranchForAccountHandler)
 	account.GET("/bank/:id", financialAccountHandler.GetBankForAccountHandler)
+
+	// Adding new group for account-transaction operations
+	accountTransaction := s.echo.Group("/accountTransaction", middleware.JWT(secret))
+	accountTransaction.POST("/registerTransaction", accountTransactionHandler.RegisterTransactionHandler)
+	accountTransaction.DELETE("/transaction/:transactionID", accountTransactionHandler.DeleteTransactionHandler)
+	accountTransaction.GET("/transaction/:transactionID", accountTransactionHandler.GetTransactionByIDHandler)
+	accountTransaction.GET("/transactions/account/:accountID", accountTransactionHandler.ListTransactionsByAccountIDHandler)
+	accountTransaction.GET("/transactions/group/:groupID", accountTransactionHandler.ListTransactionsByGroupIDHandler)
+	accountTransaction.PUT("/transaction/cancel/:transactionID", accountTransactionHandler.CancelTransactionHandler)
+	accountTransaction.POST("/transfer", accountTransactionHandler.TransferHandler)
+	accountTransaction.GET("/transactionHistory/:id", accountTransactionHandler.GetAccountTransactionHistoryHandler)
 
 }

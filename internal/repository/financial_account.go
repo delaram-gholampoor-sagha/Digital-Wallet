@@ -261,7 +261,7 @@ func (f *FinancialAccount) GetByShabaNumber(ctx context.Context, shabaNumber str
 	return &account, nil
 }
 
-func (f *FinancialAccount) GetTransactions(ctx context.Context, accountID int) ([]*entity.FinancialAccountTransaction, error) {
+func (f *FinancialAccount) GetTransactions(ctx context.Context, accountID int) ([]*entity.AccountTransaction, error) {
 	query := `
 	SELECT * 
 	FROM financial_account_transaction 
@@ -279,9 +279,9 @@ func (f *FinancialAccount) GetTransactions(ctx context.Context, accountID int) (
 	}
 	defer rows.Close()
 
-	var transactions []*entity.FinancialAccountTransaction
+	var transactions []*entity.AccountTransaction
 	for rows.Next() {
-		var transaction entity.FinancialAccountTransaction
+		var transaction entity.AccountTransaction
 
 		err := rows.Scan(
 			&transaction.TransactionID,
@@ -447,6 +447,42 @@ func (f *FinancialAccount) GetBankByAccountID(ctx context.Context, accountID int
 }
 
 func (f *FinancialAccount) UpdateStatus(ctx context.Context, accountID int, status string) error {
+	query := `
+		UPDATE financial_account
+		SET status = $2, updated_at = CURRENT_TIMESTAMP
+		WHERE account_id = $1
+	`
+	stmt, err := f.cli.PrepareContext(ctx, query)
+	if err != nil {
+		return fmt.Errorf("repository.FinancialAccount.UpdateStatus.Prepare: %w", err)
+	}
+	defer stmt.Close()
+
+	_, err = stmt.ExecContext(ctx, accountID, status)
+	if err != nil {
+		return fmt.Errorf("repository.FinancialAccount.UpdateStatus: %w", err)
+	}
 
 	return nil
+}
+
+func (f *FinancialAccount) GetAccountStatus(ctx context.Context, accountID int) (enum.FinancialAccountStatus, error) {
+	query := `
+		SELECT status
+		FROM financial_account
+		WHERE account_id = $1
+	`
+	stmt, err := f.cli.PrepareContext(ctx, query)
+	if err != nil {
+		return 0, fmt.Errorf("repository.FinancialAccount.GetAccountStatus.Prepare: %w", err)
+	}
+	defer stmt.Close()
+
+	var status enum.FinancialAccountStatus
+	err = stmt.QueryRowContext(ctx, accountID).Scan(&status)
+	if err != nil {
+		return 0, fmt.Errorf("repository.FinancialAccount.GetAccountStatus: %w", err)
+	}
+
+	return status, nil
 }

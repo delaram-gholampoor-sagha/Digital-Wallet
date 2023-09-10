@@ -7,12 +7,14 @@ type FinancialAccountStatus uint
 const (
 	Verified FinancialAccountStatus = iota
 	Unverified
+	Frozen
+	Closed
 )
 
 // IsValid checks if the FinancialAccountStatus value is valid
 func (s FinancialAccountStatus) IsValid() bool {
 	switch s {
-	case Verified, Unverified:
+	case Verified, Unverified, Frozen, Closed:
 		return true
 	default:
 		return false

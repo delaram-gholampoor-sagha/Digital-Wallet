@@ -219,28 +219,7 @@ func (h *FinancialAccountHandler) GetAccountByShabaHandler(c echo.Context) error
 	})
 }
 
-func (h *FinancialAccountHandler) GetAccountTransactionHistoryHandler(c echo.Context) error {
-	ctx := c.Request().Context()
-	h.logger.Info("GetAccountTransactionHistoryHandler invoked")
 
-	accountID, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		h.logger.Error("Invalid account ID in GetAccountTransactionHistoryHandler", zap.Error(err))
-		return c.JSON(http.StatusBadRequest, derror.NewBadRequestError("Invalid account ID"))
-	}
-
-	transactions, err := h.FinancialAccountService.GetAccountTransactionHistory(ctx, accountID)
-	if err != nil {
-		h.logger.Error("Failed to retrieve account transaction history", zap.Error(err))
-		return c.JSON(http.StatusInternalServerError, derror.NewInternalSystemError())
-	}
-
-	h.logger.Info("Successfully retrieved account transaction history", zap.Int("accountID", accountID), zap.Int("transactionCount", len(transactions)))
-	return c.JSON(http.StatusOK, protocol.Success{
-		Message: "Transaction history retrieved successfully",
-		Data:    transactions,
-	})
-}
 
 func (h *FinancialAccountHandler) ListAccountsByTypeHandler(c echo.Context) error {
 	ctx := c.Request().Context()

@@ -323,28 +323,6 @@ func (s *Service) GetAccountByShaba(ctx context.Context, shabaNumber string) (re
 	}, nil
 }
 
-func (s *Service) GetAccountTransactionHistory(ctx context.Context, accountID int) ([]*entity.FinancialAccountTransaction, error) {
-	// Validation (replace this with your own validation logic if needed)
-	if accountID <= 0 {
-		s.logger.Error("Invalid account ID", zap.Int("accountID", accountID), zap.String("method", "GetAccountTransactionHistory"))
-		return nil, derror.NewValidationError("Invalid account ID")
-	}
-
-	// TODO: Optional: I need to also add a check here to make sure the accountID belongs to the authenticated user.
-	// ... (My authorization logic here)
-
-	transactions, err := s.financialAccountTransactionService.ListTransactionsByAccountID(ctx, accountID)
-	if err != nil {
-		s.logger.Error("Failed to get transactions by account ID", zap.Error(err), zap.String("method", "GetAccountTransactionHistory"))
-		return nil, derror.NewInternalSystemError()
-	}
-
-	if len(transactions) == 0 {
-		return nil, derror.NewNotFoundError("No transactions found for the given account ID")
-	}
-
-	return transactions, nil
-}
 
 func (s *Service) ListAccountsByType(ctx context.Context, accountType string) ([]*entity.FinancialAccount, error) {
 	// Validate accountType (assuming 'checking' and 'savings' are the only valid types)
@@ -468,4 +446,8 @@ func (s *Service) GetBankForAccount(ctx context.Context, accountID int) (respons
 		UpdatedAt: bank.UpdatedAt,
 		DeletedAt: bank.DeletedAt,
 	}, nil
+}
+
+func (s *Service) GetAccountStatus(ctx context.Context, accountID int) (enum.FinancialAccountStatus, error) {
+	return enum.Verified, nil
 }

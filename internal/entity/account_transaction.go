@@ -6,14 +6,14 @@ import (
 	"github.com/delaram-gholampoor-sagha/Digital-Wallet/internal/entity/enum"
 )
 
-type FinancialAccountTransaction struct {
+type AccountTransaction struct {
 	TransactionID      int
 	TransactionGroupID int
 	FinancialAccountID int
 	Amount             float64
 	Balance            float64
 	Description        *string
-	Status             enum.FinancialAccountTransactionStatus
+	Status             enum.AccountTransactionStatus
 	CreatedAt          time.Time
 	UpdatedAt          time.Time
 	DeletedAt          *time.Time

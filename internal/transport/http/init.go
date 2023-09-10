@@ -73,6 +73,7 @@ func New(sc ServerConfig) *Server {
 		sc.FinancialCardService,
 		sc.CurrencyService,
 		sc.FinancialAccount,
+		sc.AccountTransaction,
 	)
 
 	return server

@@ -10,18 +10,18 @@ import (
 
 type FinancialCardTransactionService interface {
 	RegisterTransaction(ctx context.Context, request *request.RegisterCardTransaction) (*response.RegisterCardTransactionResponse, error)
-	GetTransactionByID(ctx context.Context, transactionID int64) (*entity.FinancialCardTransaction, error)
-	ListTransactionsByCardID(ctx context.Context, cardID int) ([]*entity.FinancialCardTransaction, error)
-	ListTransactionsByGroupID(ctx context.Context, groupID int) ([]*entity.FinancialCardTransaction, error)
+	GetTransactionByID(ctx context.Context, transactionID int64) (*entity.CardTransaction, error)
+	ListTransactionsByCardID(ctx context.Context, cardID int) ([]*entity.CardTransaction, error)
+	ListTransactionsByGroupID(ctx context.Context, groupID int) ([]*entity.CardTransaction, error)
 	Transfer(ctx context.Context, req request.Transfer) (res response.Transfer, err error)
 	CancelTransaction(ctx context.Context, transactionID int64) error
 }
 
 type CardTransactionRepository interface {
-	Insert(ctx context.Context, transaction *entity.FinancialCardTransaction) error
-	GetByID(ctx context.Context, transactionID int64) (*entity.FinancialCardTransaction, error)
-	ListByTransactionGroupID(ctx context.Context, groupID int) ([]*entity.FinancialAccountTransaction, error)
-	ListByCardID(ctx context.Context, cardID int) ([]*entity.FinancialCardTransaction, error)
+	Insert(ctx context.Context, transaction *entity.CardTransaction) error
+	GetByID(ctx context.Context, transactionID int64) (*entity.CardTransaction, error)
+	ListByTransactionGroupID(ctx context.Context, groupID int) ([]*entity.AccountTransaction, error)
+	ListByCardID(ctx context.Context, cardID int) ([]*entity.CardTransaction, error)
 
 	BeginTx(ctx context.Context) (context.Context, error) // Begins a new transaction
 	CommitTx(ctx context.Context) error                   // Commits the transaction
